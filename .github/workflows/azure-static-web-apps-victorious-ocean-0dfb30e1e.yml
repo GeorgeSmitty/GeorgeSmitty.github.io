@@ -37,7 +37,7 @@ echo "VITE_SUPABASE_URL is set: ${{ secrets.VITE_SUPABASE_URL != '' }}"
 echo "VITE_SUPABASE_ANON_KEY is set: ${{ secrets.VITE_SUPABASE_ANON_KEY !
 = '' }}"
 - name: Build
-run: pnpm --filter @workspace/survey-app run build
+run: pnpm --filter @workspace/george-survey run build
 env:
 NODE_ENV: production
 VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
@@ -50,7 +50,7 @@ azure_static_web_apps_api_token: $
 {{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
 repo_token: ${{ secrets.GITHUB_TOKEN }}
 action: "upload"
-app_location: "artifacts/survey-app/dist/public"
+app_location: "artifacts/george-survey/dist/public"
 skip_app_build: true
 api_location: ""
 close_pull_request_job:
