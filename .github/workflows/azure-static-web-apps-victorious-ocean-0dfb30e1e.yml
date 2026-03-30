@@ -56,7 +56,7 @@ jobs:
           app_location: "artifacts/george-survey/dist/public"
           skip_app_build: true
           api_location: ""
-
+          
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
