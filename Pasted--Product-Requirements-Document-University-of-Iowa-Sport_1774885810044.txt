@@ -1,0 +1,196 @@
+# Product Requirements Document: University of Iowa Sports Passion Survey
+
+## Overview
+
+Build a short web-based survey focused on measuring passion and engagement with University of Iowa sports. The app collects basic demographic information and fan engagement data and displays aggregated survey results.
+
+The application will have two main pages: a survey form and a results page showing overall response trends. All survey responses will be stored in a Supabase PostgreSQL database and deployed as an Azure Static Web App.
+
+---
+
+## Tech Stack
+
+- Framework: Vite + React
+- Database: Supabase (PostgreSQL)
+- Hosting: Azure Static Web Apps
+- Charting: Recharts
+
+---
+
+## Survey Questions
+
+| # | Question | Input Type |
+|---|---------|-----------|
+| 1 | What is your current grade level? | Dropdown |
+| 2 | What is your gender? | Radio buttons |
+| 3 | Which University of Iowa sports do you follow the most? | Checkboxes |
+| 4 | How passionate are you about University of Iowa sports? | Radio buttons |
+| 5 | How often do you watch or attend University of Iowa sporting events? | Dropdown |
+
+---
+
+## Question Details
+
+### Q1 — Grade Level
+Dropdown list
+
+Options:
+- Freshman
+- Sophomore
+- Junior
+- Senior
+- Graduate Student
+- Other
+
+Required field.
+
+---
+
+### Q2 — Gender
+Radio buttons
+
+- Male
+- Female
+- Non-binary
+- Prefer not to say
+
+Required field.
+
+---
+
+### Q3 — Iowa Sports Followed
+Checkboxes
+
+- Iowa Football
+- Iowa Men's Basketball
+- Iowa Women's Basketball
+- Iowa Wrestling
+- Iowa Baseball
+- Iowa Volleyball
+- I do not follow Iowa sports
+
+At least one must be selected.
+
+Required field.
+
+---
+
+### Q4 — Passion Level
+Radio buttons
+
+- Not interested
+- Slightly interested
+- Moderately interested
+- Very passionate
+- Extremely passionate
+
+Required field.
+
+---
+
+### Q5 — Event Attendance
+Dropdown
+
+- Never
+- Rarely (1–2 times per season)
+- Sometimes (3–5 times per season)
+- Often (6–10 times per season)
+- Very often (10+ times per season)
+
+Required field.
+
+---
+
+## Form Behavior
+
+- All fields are required
+- Inline validation messages
+- Submit button shows "Submitting..."
+- Show confirmation page after submission
+- Show summary of answers
+- Provide "View Results" button
+- If database fails, show error message
+
+---
+
+## Results Page
+
+A separate /results page displays aggregated anonymous survey data.
+
+### Charts
+
+1. Total Responses
+2. Grade Level Distribution (Bar Chart)
+3. Iowa Sports Followed (Bar Chart)
+4. Passion Level (Bar Chart)
+5. Event Attendance (Bar Chart)
+
+Use Recharts for visualization.
+
+---
+
+## Navigation
+
+Home Page:
+- Welcome message
+- Take Survey button
+- View Results button
+
+Survey Page:
+- Submit button
+- View Results button
+
+Results Page:
+- Home button
+- Take Survey button
+
+---
+
+## Database
+
+I am using my own Supabase account.
+
+Provide SQL to create the survey table and configure row level security for public access.
+
+---
+
+## Environment Variables
+
+VITE_SUPABASE_URL
+
+VITE_SUPABASE_ANON_KEY
+
+Create a .env file for local development and use GitHub secrets for production.
+
+---
+
+## Design Standards
+
+- Simple minimalist design
+- White background
+- Dark text
+- Accent color: #8A3BDB
+- Mobile responsive
+- WCAG 2.1 accessibility
+- HTML5 validation
+
+---
+
+## Footer
+
+Survey by George Smith, BAIS:3300 - Spring 2026.
+
+---
+
+## Deployment
+
+This app will be deployed to Azure Static Web Apps.
+
+Include staticwebapp.config.json in the public folder:
+
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/assets/*"]
+  }
+}

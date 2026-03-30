@@ -2,57 +2,46 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
-import { mockupPreviewPlugin } from "./mockupPreviewPlugin";
 
+const isReplit = process.env.REPL_ID !== undefined;
+const isBuild = process.env.npm_lifecycle_event === "build";
+
+// PORT is only required for the dev/preview server, not for production builds
 const rawPort = process.env.PORT;
+const port = rawPort ? Number(rawPort) : 5173;
 
-if (!rawPort) {
-  throw new Error(
-    "PORT environment variable is required but was not provided.",
-  );
-}
+// BASE_PATH defaults to "/" for production (Azure SWA serves from the root)
+const basePath = process.env.BASE_PATH ?? "/";
 
-const port = Number(rawPort);
-
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
-
-const basePath = process.env.BASE_PATH;
-
-if (!basePath) {
-  throw new Error(
-    "BASE_PATH environment variable is required but was not provided.",
-  );
-}
+const replitPlugins =
+  !isBuild && isReplit
+    ? [
+        await import("@replit/vite-plugin-runtime-error-modal").then((m) =>
+          m.default()
+        ),
+        await import("@replit/vite-plugin-cartographer").then((m) =>
+          m.cartographer({
+            root: path.resolve(import.meta.dirname, ".."),
+          })
+        ),
+        await import("@replit/vite-plugin-dev-banner").then((m) =>
+          m.devBanner()
+        ),
+      ]
+    : [];
 
 export default defineConfig({
   base: basePath,
-  plugins: [
-    mockupPreviewPlugin(),
-    react(),
-    tailwindcss(),
-    runtimeErrorOverlay(),
-    ...(process.env.NODE_ENV !== "production" &&
-    process.env.REPL_ID !== undefined
-      ? [
-          await import("@replit/vite-plugin-cartographer").then((m) =>
-            m.cartographer({
-              root: path.resolve(import.meta.dirname, ".."),
-            }),
-          ),
-        ]
-      : []),
-  ],
+  plugins: [react(), tailwindcss(), ...replitPlugins],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
     },
+    dedupe: ["react", "react-dom"],
   },
   root: path.resolve(import.meta.dirname),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist"),
+    outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
   },
   server: {
